@@ -12,6 +12,11 @@
     <!-- iPhone / iPad home screen icon -->
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#fefefe">
+
+    
+
     <style>
         html,
         body {
@@ -33,6 +38,34 @@
 <body>
     <iframe
         src="https://copilotstudio.microsoft.com/environments/Default-0157f289-8461-4324-a135-ef240b05b11d/bots/cr86c_eduCLaaSAgentTestingHr/webchat?__version__=2"></iframe>
+
+    <script>
+     if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js")
+          .then(reg => console.log("Service Worker registered ✅"))
+          .catch(err => console.error("Service Worker error ❌", err));
+      }
+    
+    
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      document.getElementById('installBtn').style.display = 'block';
+    });
+    
+    document.getElementById('installBtn').addEventListener('click', () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') {
+          console.log('PWA installed');
+        }
+        deferredPrompt = null;
+      });
+    });
+    
+    
+     </script>
 </body>
 
 </html>
